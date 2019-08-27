@@ -1,0 +1,4 @@
+#Mon Aug 19 23:41:02 CEST 2019
+base.0=/home/fanconic/polybox/DermAItoscope/FlaskWithAndroid/SimpleApp/app/build/intermediates/transforms/dexMerger/debug/3
+path.0=classes.dex
+renamed.0=classes.dex

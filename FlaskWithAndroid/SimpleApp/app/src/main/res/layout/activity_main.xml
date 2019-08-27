@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/black">
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:scaleType="centerCrop"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        android:layout_above="@id/txt"
+        android:layout_centerInParent="true"/>
+
+    <TextView
+        android:id="@+id/txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="Welcome to DermAI!\nWe wish fo you to check your moles regularly and consult a Dermatologist, if you get suspiciuous predictions."
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+
+    <Button
+        android:id="@+id/btnCamera"
+        android:text="select or capture picture"
+        style="@style/Base.Widget.AppCompat.Button.Colored"
+        android:layout_below="@id/txt"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+</RelativeLayout>
