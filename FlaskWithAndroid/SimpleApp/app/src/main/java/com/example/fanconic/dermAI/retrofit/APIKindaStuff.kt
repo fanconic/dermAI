@@ -22,7 +22,7 @@ class APIKindaStuff {
 
     companion object {
         private val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.1.19:5000")
+                .baseUrl("http://51.154.41.53:5000")
                 .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
                 .build()
 

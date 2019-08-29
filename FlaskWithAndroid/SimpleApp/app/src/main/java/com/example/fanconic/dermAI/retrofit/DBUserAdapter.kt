@@ -65,6 +65,9 @@ class DBUserAdapter(ctx: Context) {
     }
 
     companion object {
+        val FIRSTNAME = "firstname"
+        val SURNAME = "surname"
+        val COUNTRY = "country"
         val KEY_ROWID = "_id"
         val KEY_USERNAME = "username"
         val KEY_PASSWORD = "password"
