@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dip"
+    android:background="@android:color/black"
+    >
+
+
+    <TextView
+        android:id="@+id/lblUsername"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Username:"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:textAlignment="center"
+        android:layout_marginBottom="8dip"
+
+        />
+
+    <EditText
+        android:id="@+id/txtUsername"
+        android:layout_below="@id/lblUsername"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="8dip"
+        android:background="@android:color/darker_gray"
+        />
+
+    <TextView
+        android:id="@+id/lblPassword"
+        android:layout_below="@id/txtUsername"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:text="Password:"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_marginBottom="8dip"
+        />
+
+    <EditText
+        android:id="@+id/txtPassword"
+        android:layout_below="@id/lblPassword"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginBottom="8dip"
+        android:textColor="@android:color/white"
+        android:password="true"
+        android:background="@android:color/darker_gray"
+        />
+
+
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_below="@id/txtPassword"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_light"
+        android:text="Login"
+        />
+
+    <TextView
+        android:id="@+id/txtNewUser"
+        android:layout_below="@id/btnLogin"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@android:color/white"
+        android:text="New User? Register Here:"
+        android:textAlignment="center"
+        android:layout_marginBottom="8dip"
+        />
+
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_below="@id/txtNewUser"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_light"
+        android:text="Register"
+        />
+
+</RelativeLayout>
