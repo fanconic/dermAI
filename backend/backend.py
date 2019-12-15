@@ -1,14 +1,13 @@
 from flask import Flask, request, jsonify
 import base64
 from keras import layers
-from efficientnet import EfficientNetB3
+from keras_efficientnets import EfficientNetB3
 from keras.models import Sequential
 import tensorflow as tf
 from keras.models import model_from_json
 from io import BytesIO
 from PIL import Image
 import numpy as np
-import cv2
 
 tf.keras.backend.clear_session()
 
@@ -17,11 +16,11 @@ app = Flask(__name__)
 THRESHOLD = 0.04
 
 # Prefilter autoencoder model
-json_file = open('../autoencoder/autoencoder.json', 'r')
+json_file = open('./models/autoencoder/autoencoder.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 autoencoder = model_from_json(loaded_model_json)
-autoencoder.load_weights('../autoencoder/autoencoder.h5')
+autoencoder.load_weights('./models/autoencoder/autoencoder.h5')
 autoencoder.summary()
 print("Loaded autoencoder from disk")
 
@@ -29,10 +28,9 @@ print("Loaded autoencoder from disk")
 model = Sequential()
 model.add(EfficientNetB3(weights=None, input_shape=(224,224,3), include_top=False))
 model.add(layers.GlobalAveragePooling2D())
-model.add(layers.Dropout(0.5))
 model.add(layers.BatchNormalization())
 model.add(layers.Dense(2, activation= 'softmax'))  
-model.load_weights('../classifier/efficientnet.h5')
+model.load_weights('./models/classifier/efficientnet.h5')
 model.summary()
 print("Loaded Classifier from Disk")
 
