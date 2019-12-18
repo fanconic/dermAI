@@ -11,7 +11,8 @@ import numpy as np
 import cv2
 
 tf.keras.backend.clear_session()
-
+# http port
+PORT = 80
 app = Flask(__name__)
 
 THRESHOLD = 0.04
@@ -116,4 +117,4 @@ def get_mole_prediction():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=PORT)
