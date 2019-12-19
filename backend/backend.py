@@ -13,6 +13,10 @@ tf.keras.backend.clear_session()
 
 app = Flask(__name__)
 
+# IPv6 server
+HOSTNAME = '::'
+PORT = 5000
+
 THRESHOLD = 0.04
 
 # Prefilter autoencoder model
@@ -44,7 +48,7 @@ def index():
     this is a root dir of my server
     :return: str
     """
-    return "This is da Mofucking root!"
+    return "hello there %s" % request.remote_addr
 
 
 # GET
@@ -114,4 +118,4 @@ def get_mole_prediction():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host=HOSTNAME, port=PORT)

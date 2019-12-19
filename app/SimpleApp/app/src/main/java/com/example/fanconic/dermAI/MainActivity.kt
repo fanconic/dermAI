@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                         if (response.isSuccessful) {
                             val msg = response.body()?.string()
-                            println("---TTTT :: POST msg from server :: " + msg)
+                            println("---TTTT :: POST msg from server :: $msg")
 
                             if (msg != null) {
                                 val delimiter = '"'
