@@ -129,7 +129,7 @@ systemd-python==234
 tables==3.5.1
 telepot==12.7
 tensorboard==1.12.0
-tensorflow==1.9.0
+tensorflow==1.15.0
 tensorflow-tensorboard==1.5.1
 termcolor==1.1.0
 terminado==0.8.1
