@@ -11,10 +11,11 @@ bleach==1.5.0
 Brlapi==0.6.6
 catboost==0.12.1.1
 certifi==2018.1.18
+cffi==1.13.2
 chardet==3.0.4
 Click==7.0
 command-not-found==0.3
-cryptography==2.1.4
+cryptography==2.8
 cupshelpers==1.0
 cycler==0.10.0
 decorator==4.3.0
@@ -89,6 +90,7 @@ protobuf==3.6.1
 ptyprocess==0.6.0
 pybind11==2.2.4
 pycairo==1.16.2
+pycparser==2.19
 pycrypto==2.6.1
 pycups==1.9.73
 Pygments==2.2.0
@@ -124,6 +126,7 @@ six==1.12.0
 sklearn==0.0
 sockets==1.0.0
 ssh-import-id==5.7
+style==1.1.0
 system-service==0.3
 systemd-python==234
 tables==3.5.1
@@ -144,6 +147,7 @@ typed-ast==1.1.0
 ubuntu-drivers-common==0.0.0
 ufw==0.36
 unattended-upgrades==0.1
+update==0.0.1
 urllib3==1.23
 usb-creator==0.3.3
 virtualenv==16.1.0
