@@ -14,8 +14,8 @@ tf.keras.backend.clear_session()
 app = Flask(__name__)
 
 # IPv6 server
-HOSTNAME = '::'
-PORT = 5000
+HOSTNAME = '0.0.0.0'
+PORT = 80
 
 THRESHOLD = 0.04
 
