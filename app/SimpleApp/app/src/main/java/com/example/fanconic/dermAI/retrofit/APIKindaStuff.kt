@@ -12,8 +12,8 @@ import kotlin.String as String1
 
 private var protocol: String1 = "http://"
 // insert backend address here.
-private var address: String1 = "xxxxxx"
-private var port = 5000
+private var address: String1 = "ec2-18-223-109-64.us-east-2.compute.amazonaws.com"
+private var port = 80
 private var urlString = "$protocol$address:$port"
 
 class APIKindaStuff {

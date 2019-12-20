@@ -39,6 +39,7 @@ model.summary()
 print("Loaded Classifier from Disk")
 
 global graph
+global sess
 graph = tf.get_default_graph() 
 
 # root
@@ -88,6 +89,7 @@ def get_mole_prediction():
 
     # Check if picture is an outliar
     with graph.as_default():
+        set_session(sess)
         decoded_img = autoencoder.predict(img1)
     mse = np.mean((img1 - decoded_img)**2)
     print(mse)
@@ -97,6 +99,7 @@ def get_mole_prediction():
 
     else:
         with graph.as_default():
+            set_session(sess)
             y_proba = model.predict(img) 
         y_pred = np.argmax(y_proba, axis= 1)
         print(y_proba, y_pred[0])
