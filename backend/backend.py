@@ -1,21 +1,16 @@
 from flask import Flask, request, jsonify
 import base64
-from keras import layers
-from keras_efficientnets import EfficientNetB3
-from keras.models import Sequential
 import tensorflow as tf
-from keras.models import model_from_json
+import efficientnet.tfkeras as efn
 from io import BytesIO
 from PIL import Image
 import numpy as np
-
-tf.keras.backend.clear_session()
 
 app = Flask(__name__)
 
 # IPv6 server
 HOSTNAME = '0.0.0.0'
-PORT = 80
+PORT = 5000
 
 THRESHOLD = 0.04
 
@@ -23,24 +18,20 @@ THRESHOLD = 0.04
 json_file = open('./models/autoencoder/autoencoder.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
-autoencoder = model_from_json(loaded_model_json)
+autoencoder = tf.keras.models.model_from_json(loaded_model_json)
 autoencoder.load_weights('./models/autoencoder/autoencoder.h5')
 autoencoder.summary()
 print("Loaded autoencoder from disk")
 
 # EfficientNetB3 Skin Cancer Model
-model = Sequential()
-model.add(EfficientNetB3(weights=None, input_shape=(224,224,3), include_top=False))
-model.add(layers.GlobalAveragePooling2D())
-model.add(layers.BatchNormalization())
-model.add(layers.Dense(2, activation= 'softmax'))  
-model.load_weights('./models/classifier/efficientnet.h5')
+json_file = open('./models/classifier/efficientnetb0.json', 'r')
+loaded_model_json = json_file.read()
+json_file.close()
+model = tf.keras.models.model_from_json(loaded_model_json)
+model.load_weights('./models/classifier/efficientnetb0.h5')
 model.summary()
 print("Loaded Classifier from Disk")
 
-global graph
-global sess
-graph = tf.get_default_graph() 
 
 # root
 @app.route("/")
@@ -88,19 +79,15 @@ def get_mole_prediction():
 
 
     # Check if picture is an outliar
-    with graph.as_default():
-        set_session(sess)
-        decoded_img = autoencoder.predict(img1)
+    decoded_img = autoencoder.predict(img1)
     mse = np.mean((img1 - decoded_img)**2)
     print(mse)
     if mse> THRESHOLD:
         prediction = 'outlier'
         probability = 0
 
-    else:
-        with graph.as_default():
-            set_session(sess)
-            y_proba = model.predict(img) 
+    else:    
+        y_proba = model.predict(img) 
         y_pred = np.argmax(y_proba, axis= 1)
         print(y_proba, y_pred[0])
 

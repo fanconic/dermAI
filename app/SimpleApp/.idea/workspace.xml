@@ -11,7 +11,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="196a47fc-f742-46ef-91c2-018abd5d7f2d" name="Default Changelist" comment="Added">
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fanconic/dermAI/retrofit/APIKindaStuff.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fanconic/dermAI/retrofit/APIKindaStuff.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/backend.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/backend.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,8 +54,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/fanconic/dermAI/retrofit/APIKindaStuff.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="18" column="21" lean-forward="true" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+            <state relative-caret-position="725">
+              <caret line="29" column="16" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
               <folding>
                 <element signature="e#46#342#0" expanded="true" />
               </folding>
@@ -312,7 +312,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="48" width="2560" height="1392" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.23851733" />
@@ -323,7 +322,7 @@
       <window_info id="Designer" order="6" />
       <window_info id="Resources Explorer" order="7" weight="0.32977587" />
       <window_info id="Capture Tool" order="8" />
-      <window_info active="true" anchor="bottom" id="Run" order="0" visible="true" weight="0.32873166" />
+      <window_info anchor="bottom" id="Run" order="0" weight="0.32873166" />
       <window_info anchor="bottom" id="Logcat" order="1" weight="0.32873166" />
       <window_info anchor="bottom" id="TODO" order="2" weight="0.32873166" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.31578946" />
@@ -589,8 +588,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/fanconic/dermAI/retrofit/APIKindaStuff.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="18" column="21" lean-forward="true" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+        <state relative-caret-position="725">
+          <caret line="29" column="16" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
           <folding>
             <element signature="e#46#342#0" expanded="true" />
           </folding>
