@@ -8,9 +8,10 @@ import numpy as np
 
 app = Flask(__name__)
 
-# IPv6 server
+# Broadcast
 HOSTNAME = '0.0.0.0'
-PORT = 5000
+# HTTP Port
+PORT = 80
 
 THRESHOLD = 0.04
 
@@ -32,6 +33,8 @@ model.load_weights('./models/classifier/efficientnetb0.h5')
 model.summary()
 print("Loaded Classifier from Disk")
 
+global graph
+graph = tf.get_default_graph() 
 
 # root
 @app.route("/")
@@ -79,15 +82,17 @@ def get_mole_prediction():
 
 
     # Check if picture is an outliar
-    decoded_img = autoencoder.predict(img1)
+    with graph.as_default():
+        decoded_img = autoencoder.predict(img1)
     mse = np.mean((img1 - decoded_img)**2)
     print(mse)
     if mse> THRESHOLD:
         prediction = 'outlier'
         probability = 0
 
-    else:    
-        y_proba = model.predict(img) 
+    else:
+        with graph.as_default():    
+            y_proba = model.predict(img) 
         y_pred = np.argmax(y_proba, axis= 1)
         print(y_proba, y_pred[0])
 
