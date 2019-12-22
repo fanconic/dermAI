@@ -24,6 +24,8 @@ out/
 .gradle/
 build/
 
+
+
 # Local configuration file (sdk path, etc)
 local.properties
 
@@ -40,6 +42,8 @@ proguard/
 captures/
 
 # IntelliJ
+# idea
+app/SimpleApp/.idea
 *.iml
 .idea/workspace.xml
 .idea/tasks.xml
@@ -70,3 +74,5 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+app/SimpleApp/.idea/workspace.xml
+app/SimpleApp/.idea/caches/build_file_checksums.ser
