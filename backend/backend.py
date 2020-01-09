@@ -24,7 +24,7 @@ autoencoder.load_weights('./models/autoencoder/autoencoder.h5')
 autoencoder.summary()
 print("Loaded autoencoder from disk")
 
-# EfficientNetB3 Skin Cancer Model
+# EfficientNet Skin Cancer Model
 json_file = open('./models/classifier/efficientnetb0.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
@@ -113,8 +113,4 @@ def get_mole_prediction():
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-    app.run(host='0.0.0.0', port=PORT)
-=======
     app.run(host=HOSTNAME, port=PORT)
->>>>>>> origin/master
