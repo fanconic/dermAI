@@ -1,4 +1,13 @@
-from flask import Flask, request, jsonify
+'''
+Backend script to give predictions with Deep Learning Model.
+
+Workflow: Picture is taken and resized on Android App, and then send via HTTP to Flask backend.
+The information is then extracted and fed through the neural network.
+
+Author: Claudio Fanconi
+Email: claudio.fanconi@outlook.com
+'''
+from flask impfrom flask import Flask, request, jsonify
 import base64
 import tensorflow as tf
 import efficientnet.tfkeras as efn

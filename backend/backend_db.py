@@ -1,22 +1,54 @@
+'''
+Backend scrip to save credentials of new users in SQLite DB.
+
+Workflow: Android App creates a JSON string, which is then transmitted via Flask to backend. 
+The information is then extracted and stored into the SQLite database.
+
+Author: Claudio Fanconi
+Email: claudio.fanconi@outlook.com
+'''
+
 from flask import Flask, request, jsonify, render_template
-import mysql.connector
+import sqlite3
+import hashlib
 
-app = Flask(__name__)
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="fanconic",
-    passwd="",
-    database="MyDB"
-)
-
-print(mydb) 
-
-# Broadcast and port
 HOSTNAME = 'localhost'
 PORT = 8000
+DATABASE = '../databases/MyDB.db'
+
+# Initialize Flask application
+app = Flask(__name__)
+
+def encrypt_string(hash_string):
+    sha_signature = hashlib.sha256(hash_string.encode()).hexdigest()
+    return sha_signature
+
+def create_connection(db_file):
+    """ create a database connection to the SQLite database
+        specified by db_file
+    :param db_file: database file
+    :return: Connection object or None
+    """
+    conn = None
+    try:
+        conn = sqlite3.connect(db_file)
+    except sqlite3.Error as e:
+        print(e)
+ 
+    return conn
+
+def initialize_db(conn):
+    """ Initialize user table
+    :param conn: database connection
+    """
+    with conn:
+        cur = conn.cursor()
+        cur.execute('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT,fname TEXT, lname TEXT, email TEXT, pwd TEXT, age INTEGER, city TEXT, country TEXT)')
+
+    conn.commit()
 
 # root
-@app.route("/")
+@app.route('/')
 def index():
     """
     this is a root dir of my server
@@ -24,34 +56,49 @@ def index():
     """
     return "hello there %s" % request.remote_addr
 
-# Register new user to DB
-@app.route('/new_user', methods=['GET', 'POST'])
-def new_user():
+@app.route('/login')
+def login():
     """
-    Register new User
-    :return: page rendering
-    """
-    if request.method == "POST":
-        details = request.form
-        print(details)
-        firstName = details['fname']
-        lastName = details['lname']
-        cur = mydb.cursor()
-        cur.execute("INSERT INTO MyUsers(firstName, lastName) VALUES (%s, %s)", (firstName, lastName))
-        cur.close()
-        return 'success'
-    return render_template('new_user.html')
-
-
-# GET
-@app.route('/users/<user>')
-def hello_user(user):
-    """
-    this serves as a demo purpose
-    :param user:
+    Login page
     :return: str
     """
-    return "What's up %s, you crazy Dawg!" % user
+    return render_template('login.html')
+
+@app.route('/new_user', methods=['POST', 'GET'])
+def new_user():
+    """
+    Adds new user to DB
+    :return: json
+    """
+    if request.method == 'POST':
+        try:
+            fname = request.form['fname']
+            lname = request.form['lname']
+            email = request.form['email']
+            pwd = encrypt_string(request.form['pwd'])
+            age = request.form['age']
+            city = request.form['city']
+            country = request.form['country']
+
+            conn = create_connection(DATABASE)
+            with conn:
+                cur = conn.cursor()
+                cur.execute("INSERT INTO users (fname,lname,email,pwd,age,city,country) VALUES (?,?,?,?,?,?,?)",(fname,lname,email,pwd,age,city,country))
+            
+            conn.commit()
+            msg = "Record successfully added"
+
+        except:
+            conn.rollback()
+            msg = "error in insert operation"
+      
+        finally:
+            return render_template("result.html",msg = msg)
+            conn.close()
 
 if __name__ == '__main__':
+    conn = create_connection(DATABASE)
+    initialize_db(conn)
+    conn.close()
+
     app.run(host=HOSTNAME, port=PORT)
