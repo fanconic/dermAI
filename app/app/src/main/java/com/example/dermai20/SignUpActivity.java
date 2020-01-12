@@ -8,10 +8,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -23,6 +23,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,10 +34,10 @@ import okhttp3.Response;
 import static com.example.dermai20.R.style.ThemeOverlay_AppCompat_Dark;
 
 public class SignUpActivity extends AppCompatActivity {
-    private static final String TAG = "SignUpActivity";
-    String URL = "https://192.168.178.24:8000/new_user";
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    OkHttpClient client = new OkHttpClient();
+    private static final String TAG = "SignUpActivity";
+    String BACKEND_URL = "";
+    TextView txtString;
 
     @BindView(R.id.input_fname)
     EditText _fnameText;
@@ -59,8 +61,9 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
-
+        BACKEND_URL = getResources().getString(R.string.backend_url);
         _signupButton.setOnClickListener(v -> signup());
+        txtString = findViewById(R.id.response);
 
         _loginLink.setOnClickListener(v -> {
             // Finish the registration screen and return to the Login activity
@@ -68,19 +71,31 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    String post(String url, String json) throws IOException {
+    void post(String url, String json) throws IOException {
+        OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
                 .build();
-        try (Response response = client.newCall(request).execute()) {
-            return response.body().string();
-        }
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                SignUpActivity.this.runOnUiThread(() -> txtString.setText("Failed"));
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String myResponse = response.body().string();
+                SignUpActivity.this.runOnUiThread(() -> txtString.setText(myResponse));
+            }
+        });
     }
 
     public void signup() {
-        Log.d(TAG, "Sign Up");
+        Log.d(TAG, getResources().getString(R.string.sign_up));
 
         if (!validate()) {
             onSignupFailed();
@@ -91,7 +106,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         final ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this, ThemeOverlay_AppCompat_Dark);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
+        progressDialog.setMessage(getResources().getString(R.string.creating_account));
         progressDialog.show();
 
         String fname = _fnameText.getText().toString();
@@ -127,14 +142,11 @@ public class SignUpActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        try{
-            String response = post(URL, json.toString());
-
-        } catch (IOException e){
+        try {
+            post(BACKEND_URL, json.toString());
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         new android.os.Handler().postDelayed(
                 () -> {
@@ -146,7 +158,6 @@ public class SignUpActivity extends AppCompatActivity {
                 }, 3000);
     }
 
-
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
@@ -154,7 +165,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), getResources().getString(R.string.login_failed), Toast.LENGTH_LONG).show();
         _signupButton.setEnabled(true);
     }
 
@@ -169,43 +180,43 @@ public class SignUpActivity extends AppCompatActivity {
         String city = _cityText.getText().toString();
 
         if (fname.isEmpty() || fname.length() < 3) {
-            _fnameText.setError("at least 3 characters");
+            _fnameText.setError(getString(R.string.at_least_3_char));
             valid = false;
         } else {
             _lnameText.setError(null);
         }
 
         if (lname.isEmpty() || lname.length() < 2) {
-            _lnameText.setError("at least 3 characters");
+            _lnameText.setError(getResources().getString(R.string.at_least_3_char));
             valid = false;
         } else {
             _lnameText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+            _emailText.setError(getResources().getString(R.string.valid_email));
             valid = false;
         } else {
             _emailText.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters");
+            _passwordText.setError(getResources().getString(R.string.valid_pwd));
             valid = false;
         } else {
             _passwordText.setError(null);
         }
 
         List<String> countries = Arrays.asList(getResources().getStringArray(R.array.countries_array));
-        if (country.isEmpty() || countries.contains(country)) {
-            _countryText.setError("at least 3 characters");
+        if (country.isEmpty() || !countries.contains(country)) {
+            _countryText.setError(getResources().getString(R.string.not_country));
             valid = false;
         } else {
             _countryText.setError(null);
         }
 
         if (city.isEmpty() || city.length() < 2) {
-            _cityText.setError("at least 3 characters");
+            _cityText.setError(getResources().getString(R.string.at_least_3_char));
             valid = false;
         } else {
             _cityText.setError(null);

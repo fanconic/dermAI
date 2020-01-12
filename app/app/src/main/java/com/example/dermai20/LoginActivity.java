@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login() {
-        Log.d(TAG, "Login");
+        Log.d(TAG, getResources().getString(R.string.login));
 
         if (!validate()) {
             onLoginFailed();
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                 ThemeOverlay_AppCompat_Dark);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
+        progressDialog.setMessage(getResources().getString(R.string.authenticating));
         progressDialog.show();
 
         String email = _emailText.getText().toString();
@@ -66,13 +66,11 @@ public class LoginActivity extends AppCompatActivity {
         // TODO: Implement your own authentication logic here.
 
         new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
+                () -> {
+                    // On complete call either onLoginSuccess or onLoginFailed
+                    onLoginSuccess();
+                    // onLoginFailed();
+                    progressDialog.dismiss();
                 }, 3000);
     }
 
@@ -101,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), getResources().getString(R.string.login_failed), Toast.LENGTH_LONG).show();
 
         _loginButton.setEnabled(true);
     }
@@ -113,14 +111,14 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+            _emailText.setError(getResources().getString(R.string.valid_email));
             valid = false;
         } else {
             _emailText.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters");
+        if (password.isEmpty() || password.length() < 10) {
+            _passwordText.setError(getResources().getString(R.string.valid_pwd));
             valid = false;
         } else {
             _passwordText.setError(null);

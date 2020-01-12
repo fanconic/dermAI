@@ -132,5 +132,15 @@
             android:textColor="#640202"
             android:textSize="16dip" />
 
+        <TextView
+            android:id="@+id/response"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="#640202"
+            android:textSize="16dip" />
+
     </LinearLayout>
 </ScrollView>
