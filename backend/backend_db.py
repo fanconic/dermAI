@@ -12,7 +12,7 @@ from flask import Flask, request, jsonify, render_template
 import sqlite3
 import hashlib
 
-HOSTNAME = 'localhost'
+HOSTNAME = '0.0.0.0'
 PORT = 8000
 DATABASE = '../databases/MyDB.db'
 
@@ -71,14 +71,15 @@ def new_user():
     :return: json
     """
     if request.method == 'POST':
+        json = request.get_json()
         try:
-            fname = request.form['fname']
-            lname = request.form['lname']
-            email = request.form['email']
-            pwd = encrypt_string(request.form['pwd'])
-            age = request.form['age']
-            city = request.form['city']
-            country = request.form['country']
+            fname = json['fname']
+            lname = json['lname']
+            email = json['email']
+            pwd = encrypt_string(json['pwd'])
+            age = json['age']
+            city = json['city']
+            country = json['country']
 
             conn = create_connection(DATABASE)
             with conn:
@@ -101,4 +102,4 @@ if __name__ == '__main__':
     initialize_db(conn)
     conn.close()
 
-    app.run(host=HOSTNAME, port=PORT)
+    app.run(host=HOSTNAME, port=PORT, ssl_context='adhoc')
