@@ -47,6 +47,8 @@ public class SignUpActivity extends AppCompatActivity {
     EditText _emailText;
     @BindView(R.id.input_password)
     EditText _passwordText;
+    @BindView(R.id.input_age)
+    EditText _ageNumber;
     @BindView(R.id.input_country)
     EditText _countryText;
     @BindView(R.id.input_city)
@@ -63,7 +65,6 @@ public class SignUpActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         BACKEND_URL = getResources().getString(R.string.backend_url);
         _signupButton.setOnClickListener(v -> signup());
-        txtString = findViewById(R.id.response);
 
         _loginLink.setOnClickListener(v -> {
             // Finish the registration screen and return to the Login activity
@@ -71,9 +72,9 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    void post(String url, String json) throws IOException {
+    void post(String url, String json_string) throws IOException {
         OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create(JSON, json);
+        RequestBody body = RequestBody.create(JSON, json_string);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
@@ -82,14 +83,12 @@ public class SignUpActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                SignUpActivity.this.runOnUiThread(() -> txtString.setText("Failed"));
                 call.cancel();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                final String myResponse = response.body().string();
-                SignUpActivity.this.runOnUiThread(() -> txtString.setText(myResponse));
+                Log.d("TAG",response.body().string());
             }
         });
     }
@@ -113,6 +112,7 @@ public class SignUpActivity extends AppCompatActivity {
         String lname = _lnameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
+        int age = Integer.parseInt(_ageNumber.getText().toString());
         String country = _countryText.getText().toString();
         String city = _cityText.getText().toString();
 
@@ -137,6 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
             json.put("lname", lname);
             json.put("email", email);
             json.put("pwd", password_encrypted);
+            json.put("age",age);
             json.put("country", country);
             json.put("city", city);
         } catch (JSONException e) {
@@ -176,6 +177,7 @@ public class SignUpActivity extends AppCompatActivity {
         String lname = _lnameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
+        int age = Integer.parseInt(_ageNumber.getText().toString());
         String country = _countryText.getText().toString();
         String city = _cityText.getText().toString();
 
@@ -202,6 +204,13 @@ public class SignUpActivity extends AppCompatActivity {
 
         if (password.isEmpty() || password.length() < 10) {
             _passwordText.setError(getResources().getString(R.string.valid_pwd));
+            valid = false;
+        } else {
+            _passwordText.setError(null);
+        }
+
+        if (age < 0 || age >= 130) {
+            _ageNumber.setError(getResources().getString(R.string.invalid_age));
             valid = false;
         } else {
             _passwordText.setError(null);

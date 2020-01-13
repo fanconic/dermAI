@@ -13,14 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_gravity="center"
         android:paddingLeft="24dp"
         android:paddingTop="56dp"
         android:paddingRight="24dp">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="250dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
             android:layout_marginBottom="24dp"
             android:src="@drawable/dermai_vertical" />
 

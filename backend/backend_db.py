@@ -19,10 +19,6 @@ DATABASE = '../databases/MyDB.db'
 # Initialize Flask application
 app = Flask(__name__)
 
-def encrypt_string(hash_string):
-    sha_signature = hashlib.sha256(hash_string.encode()).hexdigest()
-    return sha_signature
-
 def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file
@@ -76,7 +72,7 @@ def new_user():
             fname = json['fname']
             lname = json['lname']
             email = json['email']
-            pwd = encrypt_string(json['pwd'])
+            pwd = json['pwd']
             age = json['age']
             city = json['city']
             country = json['country']
@@ -94,7 +90,7 @@ def new_user():
             msg = "error in insert operation"
       
         finally:
-            return render_template("result.html",msg = msg)
+            return "Record successfully added to Database."
             conn.close()
 
 if __name__ == '__main__':
@@ -102,4 +98,4 @@ if __name__ == '__main__':
     initialize_db(conn)
     conn.close()
 
-    app.run(host=HOSTNAME, port=PORT, ssl_context='adhoc')
+    app.run(host=HOSTNAME, port=PORT)

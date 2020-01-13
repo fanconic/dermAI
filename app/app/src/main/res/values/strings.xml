@@ -11,4 +11,6 @@
     <string name="creating_account">Creating Account...</string>
     <string name="login">Login</string>
     <string name="authenticating">Authenticating...</string>
+    <string name="age">Age</string>
+    <string name="invalid_age">Invalid age.</string>
 </resources>
