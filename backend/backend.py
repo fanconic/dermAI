@@ -7,7 +7,7 @@ The information is then extracted and fed through the neural network.
 Author: Claudio Fanconi
 Email: claudio.fanconi@outlook.com
 '''
-from flask impfrom flask import Flask, request, jsonify
+from flask import Flask, request, jsonify
 import base64
 import tensorflow as tf
 import efficientnet.tfkeras as efn
