@@ -1,5 +1,6 @@
-# Training Data
-data/
+# Database
+database/MyDB.db
+database/__pycache__
 
 # Built application files
 *.apk

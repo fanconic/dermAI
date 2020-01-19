@@ -20,25 +20,25 @@ app = Flask(__name__)
 # Broadcast
 HOSTNAME = '0.0.0.0'
 # HTTP Port
-PORT = 80
+PORT = 6000
 
 THRESHOLD = 0.04
 
 # Prefilter autoencoder model
-json_file = open('./models/autoencoder/autoencoder.json', 'r')
+json_file = open('./autoencoder/autoencoder.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 autoencoder = tf.keras.models.model_from_json(loaded_model_json)
-autoencoder.load_weights('./models/autoencoder/autoencoder.h5')
+autoencoder.load_weights('./autoencoder/autoencoder.h5')
 autoencoder.summary()
 print("Loaded autoencoder from disk")
 
 # EfficientNet Skin Cancer Model
-json_file = open('./models/classifier/efficientnetb0.json', 'r')
+json_file = open('./classifier/efficientnetb0.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 model = tf.keras.models.model_from_json(loaded_model_json)
-model.load_weights('./models/classifier/efficientnetb0.h5')
+model.load_weights('./classifier/efficientnetb0.h5')
 model.summary()
 print("Loaded Classifier from Disk")
 
