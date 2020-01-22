@@ -2,6 +2,10 @@
 database/MyDB.db
 database/__pycache__
 
+# Pycache
+database/__pycache__
+ml_service/__pycache__
+
 # Built application files
 *.apk
 *.ap_

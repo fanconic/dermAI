@@ -20,7 +20,7 @@ app = Flask(__name__)
 # Broadcast
 HOSTNAME = '0.0.0.0'
 # HTTP Port
-PORT = 6000
+PORT = 8000
 
 THRESHOLD = 0.04
 
@@ -41,9 +41,6 @@ model = tf.keras.models.model_from_json(loaded_model_json)
 model.load_weights('./classifier/efficientnetb0.h5')
 model.summary()
 print("Loaded Classifier from Disk")
-
-global graph
-graph = tf.get_default_graph() 
 
 # root
 @app.route("/")

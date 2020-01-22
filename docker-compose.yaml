@@ -5,7 +5,7 @@ services:
         stdin_open: true
         tty: true
         ports:
-        - "5000:5000"
+        - 5000:5000
         volumes:
         - ./database:/code
         environment:
@@ -13,8 +13,9 @@ services:
     ml:
         build: ./ml_service
         ports:
-        - "6000:6000"
+        - 8000:8000
         volumes:
         - ./ml_service:/code
         environment:
             FLASK_ENV: development
+            FLASK_DEBUG: 0
