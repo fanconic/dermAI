@@ -52,16 +52,6 @@ def index():
     """
     return "hello there %s" % request.remote_addr
 
-@app.route('/login')
-def login():
-    """
-    Login page
-    :return: str
-    """
-    #TODO:
-    # Implement login logic here
-    return "Work in Progress"
-
 @app.route('/new_user', methods=['POST', 'GET'])
 def new_user():
     """
@@ -83,10 +73,48 @@ def new_user():
             conn = create_connection(DATABASE)
             with conn:
                 cur = conn.cursor()
-                cur.execute("INSERT INTO users (fname,lname,email,pwd,age,city,country) VALUES (?,?,?,?,?,?,?)",(fname,lname,email,pwd,age,city,country))
-            
+                cur.execute('SELECT * FROM users WHERE (fname=? AND lname=? AND email=?)', (fname, lname, email))
+                entry = cur.fetchone()
+                
+                if entry is None:
+                    msg = {"status":"ALREADY EXISTS"}
+                else:
+                    cur.execute("INSERT INTO users (fname,lname,email,pwd,age,city,country) VALUES (?,?,?,?,?,?,?)",(fname,lname,email,pwd,age,city,country))
+                    msg = {"status":"OK"}
+
             conn.commit()
-            msg = {"status":"OK"}
+
+        except:
+            conn.rollback()
+            msg = {"status":"ERROR"}
+      
+        finally:
+            return json.dumps(msg)
+            conn.close()
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    """
+    Verifies Login
+    :return: json
+    """
+    msg = {"status":"UNKNOWN"}
+    if request.method == 'POST':
+        received = request.get_json()
+        try:
+            email = received['email']
+            pwd = received['pwd']
+            conn = create_connection(DATABASE)
+            with conn:
+                cur = conn.cursor()
+                cur.execute('SELECT * FROM users WHERE (email=? AND pwd=?)', (email, pwd))
+                entry = cur.fetchone()
+                
+                if entry is None:
+                    msg = {"status":"NOT CORRECT"}
+                else:
+                    msg = {"status":"OK"}
+            conn.commit()
 
         except:
             conn.rollback()
