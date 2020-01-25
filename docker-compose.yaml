@@ -13,7 +13,7 @@ services:
     ml:
         build: ./ml_service
         ports:
-        - 8000:8000
+        - 5001:5001
         volumes:
         - ./ml_service:/code
         environment:
