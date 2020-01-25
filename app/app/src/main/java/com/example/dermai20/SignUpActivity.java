@@ -37,7 +37,6 @@ public class SignUpActivity extends AppCompatActivity {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String TAG = "SignUpActivity";
     String BACKEND_URL = "";
-    TextView txtString;
 
     @BindView(R.id.input_fname)
     EditText _fnameText;
@@ -58,12 +57,17 @@ public class SignUpActivity extends AppCompatActivity {
     @BindView(R.id.link_login)
     TextView _loginLink;
 
+    /**
+     * Execute when this activity is being created.
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
-        BACKEND_URL = getResources().getString(R.string.backend_url);
+        BACKEND_URL = getResources().getString(R.string.db_app) + getResources().getString(R.string.db_new_user);
         _signupButton.setOnClickListener(v -> signup());
 
         _loginLink.setOnClickListener(v -> {
@@ -72,7 +76,14 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    void post(String url, String json_string) throws IOException {
+    /**
+     * Performs a HTML POST request to the backend.
+     *
+     * @param url : backend URL
+     * @param json_string: body of the POST request
+     * @throws IOException
+     */
+    public static String post(String url, String json_string) throws IOException {
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON, json_string);
         Request request = new Request.Builder()
@@ -88,11 +99,41 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("TAG",response.body().string());
+                final String repsonse = response.body().string();
+                Log.d("TAG", "JSON Response: " + response);
             }
         });
+        return "";
     }
 
+    /**
+     * This class turns a encrypts a String with a SHA-256 encryption.
+     *
+     * @param clear_text: clear text
+     * @return encrypted_text: encrypted text
+     */
+    public static String encrypt_password(String clear_text){
+        MessageDigest digest = null;
+        String encrypted_text = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] hash = new byte[0];
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            hash = digest.digest(clear_text.getBytes(StandardCharsets.UTF_8));
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            encrypted_text = Base64.getEncoder().encodeToString(hash);
+        }
+        return encrypted_text;
+    }
+
+    /**
+     * Store the text informations into a JSON string and post the HTML request.
+     * Furthermore, process the response.
+     */
     public void signup() {
         Log.d(TAG, getResources().getString(R.string.sign_up));
 
@@ -111,38 +152,26 @@ public class SignUpActivity extends AppCompatActivity {
         String fname = _fnameText.getText().toString();
         String lname = _lnameText.getText().toString();
         String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        String password = encrypt_password(_passwordText.getText().toString());
         int age = Integer.parseInt(_ageNumber.getText().toString());
         String country = _countryText.getText().toString();
         String city = _cityText.getText().toString();
 
-        MessageDigest digest = null;
-        String password_encrypted = "";
-        try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        byte[] hash = new byte[0];
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-            hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-        }
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            password_encrypted = Base64.getEncoder().encodeToString(hash);
-        }
-
+        // Create JSON Object
         JSONObject json = new JSONObject();
         try {
             json.put("fname", fname);
             json.put("lname", lname);
             json.put("email", email);
-            json.put("pwd", password_encrypted);
+            json.put("pwd", password);
             json.put("age",age);
             json.put("country", country);
             json.put("city", city);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        // Execute POST request
         try {
             post(BACKEND_URL, json.toString());
         } catch (IOException e) {
@@ -159,17 +188,28 @@ public class SignUpActivity extends AppCompatActivity {
                 }, 3000);
     }
 
+    /**
+     * Action upon successfull signup.
+     */
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
         finish();
     }
 
+    /**
+     * Action upon failed signup.
+     */
     public void onSignupFailed() {
         Toast.makeText(getBaseContext(), getResources().getString(R.string.login_failed), Toast.LENGTH_LONG).show();
         _signupButton.setEnabled(true);
     }
 
+    /**
+     * Validate if the inputs of the signup form are valid.
+     *
+     * @return valid, True if all the inputs are valid
+     */
     public boolean validate() {
         boolean valid = true;
 

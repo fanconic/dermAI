@@ -10,6 +10,11 @@ import androidx.appcompat.widget.AppCompatButton;
 
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Execute when the activity is created.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
         goToLogin.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, LoginActivity.class)));
     }
 
+    /**
+     * Create a Options Menu, once the activity is created.
+     *
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

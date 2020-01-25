@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">DermAI 2.0</string>
     <string name="action_settings">Settings</string>
-    <string name="backend_url">http://192.168.178.24:8000/new_user</string>
+    <string name="db_app">http://192.168.1.117:5000/</string>
+    <string name="db_new_user">new_user</string>
+    <string name="db_login">login</string>
+    <string name="ml_app">http://192.168.1.117:5001/</string>
     <string name="login_failed">Login failed</string>
     <string name="at_least_3_char">at least 3 characters</string>
     <string name="valid_email">enter a valid email address</string>
