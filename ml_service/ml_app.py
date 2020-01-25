@@ -20,7 +20,7 @@ app = Flask(__name__)
 # Broadcast
 HOSTNAME = '0.0.0.0'
 # HTTP Port
-PORT = 8000
+PORT = 5001
 
 THRESHOLD = 0.04
 
@@ -60,7 +60,7 @@ def hello_user(user):
     :param user:
     :return: str
     """
-    return "What's up %s, you crazy Dawg!" % user
+    return "What's up %s!" % user
 
 
 # POST
@@ -71,7 +71,6 @@ def get_mole_prediction():
     :return: json
     """
     json = request.get_json()
-    #data = json.loads(data)
 
     chat_id = str(json['chat_id'])
     encoded_image = json['encoded_image']
@@ -86,19 +85,15 @@ def get_mole_prediction():
     img = np.reshape(img, (1,224,224,3))
     img1 =np.reshape(img1, (1,224,224,3))
 
-
-    # Check if picture is an outliar
-    with graph.as_default():
-        decoded_img = autoencoder.predict(img1)
+    decoded_img = autoencoder.predict(img1)
     mse = np.mean((img1 - decoded_img)**2)
     print(mse)
     if mse> THRESHOLD:
         prediction = 'outlier'
         probability = 0
 
-    else:
-        with graph.as_default():    
-            y_proba = model.predict(img) 
+    else: 
+        y_proba = model.predict(img) 
         y_pred = np.argmax(y_proba, axis= 1)
         print(y_proba, y_pred[0])
 

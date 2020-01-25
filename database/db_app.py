@@ -77,11 +77,10 @@ def new_user():
                 entry = cur.fetchone()
                 
                 if entry is None:
-                    msg = {"status":"ALREADY EXISTS"}
-                else:
                     cur.execute("INSERT INTO users (fname,lname,email,pwd,age,city,country) VALUES (?,?,?,?,?,?,?)",(fname,lname,email,pwd,age,city,country))
                     msg = {"status":"OK"}
-
+                else:
+                    msg = {"status":"ALREADY EXISTS"}
             conn.commit()
 
         except:
