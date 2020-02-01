@@ -17,4 +17,5 @@
     <string name="age">Age</string>
     <string name="invalid_age">Invalid age.</string>
     <string name="encryption_algo">SHA-256</string>
+    <string name="successfull_code">OK</string>
 </resources>

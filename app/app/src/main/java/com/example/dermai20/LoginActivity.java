@@ -2,6 +2,7 @@ package com.example.dermai20;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -9,13 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
      * Login action, which creates the JSON packet and executes the POST request to the backend.
      * Furthermore, processes the response of the server.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void login() {
         Log.d(TAG, getResources().getString(R.string.login));
 
@@ -89,13 +89,15 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Execute POST request
-        HttpConnector.post(BACKEND_URL, json.toString());
+        String response_code = HttpConnector.post(BACKEND_URL, json.toString());
 
         new android.os.Handler().postDelayed(
                 () -> {
-                    // On complete call either onLoginSuccess or onLoginFailed
-                    onLoginSuccess();
-                    // onLoginFailed();
+                    if(response_code.equals(getResources().getString(R.string.successfull_code))){
+                        onLoginSuccess();
+                    } else {
+                        onLoginFailed();
+                    }
                     progressDialog.dismiss();
                 }, 3000);
     }
@@ -128,10 +130,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Action upon successfull login.
+     * Action upon successful login, go to UserActivity
      */
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
+        Intent myIntent = new Intent(getBaseContext(), UserActivity.class);
+        startActivity(myIntent);
         finish();
     }
 
@@ -140,7 +144,6 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), getResources().getString(R.string.login_failed), Toast.LENGTH_LONG).show();
-
         _loginButton.setEnabled(true);
     }
 

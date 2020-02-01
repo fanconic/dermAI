@@ -21,7 +21,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HttpConnector extends AppCompatActivity {
-    private static final String TAG = "SHT";
+    private static final String TAG = "HttpConnector";
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     /**
