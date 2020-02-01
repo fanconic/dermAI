@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.show();
 
         String email = _emailText.getText().toString();
-        String password = SignUpActivity.encrypt_password(_passwordText.getText().toString());
+        String password = Utils.encrypt_password(_passwordText.getText().toString());
 
         // Create JSON Object
         JSONObject json = new JSONObject();
@@ -88,11 +89,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Execute POST request
-        try {
-            SignUpActivity.post(BACKEND_URL, json.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        HttpConnector.post(BACKEND_URL, json.toString());
 
         new android.os.Handler().postDelayed(
                 () -> {

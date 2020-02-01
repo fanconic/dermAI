@@ -1,6 +1,7 @@
 package com.example.dermai20;
 
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -8,33 +9,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import static com.example.dermai20.R.style.ThemeOverlay_AppCompat_Dark;
 
 public class SignUpActivity extends AppCompatActivity {
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String TAG = "SignUpActivity";
     String BACKEND_URL = "";
 
@@ -62,6 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
      *
      * @param savedInstanceState
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,64 +68,12 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Performs a HTML POST request to the backend.
-     *
-     * @param url : backend URL
-     * @param json_string: body of the POST request
-     * @throws IOException
-     */
-    public static String post(String url, String json_string) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create(JSON, json_string);
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                call.cancel();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String repsonse = response.body().string();
-                Log.d("TAG", "JSON Response: " + response);
-            }
-        });
-        return "";
-    }
-
-    /**
-     * This class turns a encrypts a String with a SHA-256 encryption.
-     *
-     * @param clear_text: clear text
-     * @return encrypted_text: encrypted text
-     */
-    public static String encrypt_password(String clear_text){
-        MessageDigest digest = null;
-        String encrypted_text = null;
-        try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        byte[] hash = new byte[0];
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-            hash = digest.digest(clear_text.getBytes(StandardCharsets.UTF_8));
-        }
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            encrypted_text = Base64.getEncoder().encodeToString(hash);
-        }
-        return encrypted_text;
-    }
 
     /**
      * Store the text informations into a JSON string and post the HTML request.
      * Furthermore, process the response.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void signup() {
         Log.d(TAG, getResources().getString(R.string.sign_up));
 
@@ -152,7 +92,7 @@ public class SignUpActivity extends AppCompatActivity {
         String fname = _fnameText.getText().toString();
         String lname = _lnameText.getText().toString();
         String email = _emailText.getText().toString();
-        String password = encrypt_password(_passwordText.getText().toString());
+        String password = Utils.encrypt_password(_passwordText.getText().toString());
         int age = Integer.parseInt(_ageNumber.getText().toString());
         String country = _countryText.getText().toString();
         String city = _cityText.getText().toString();
@@ -172,11 +112,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         // Execute POST request
-        try {
-            post(BACKEND_URL, json.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        HttpConnector.post(BACKEND_URL, json.toString());
 
         new android.os.Handler().postDelayed(
                 () -> {
