@@ -1,4 +1,4 @@
-'''
+"""
 Backend scrip to save credentials of new users in SQLite DB.
 
 Workflow: Android App creates a JSON string, which is then transmitted via Flask to backend. 
@@ -6,19 +6,20 @@ The information is then extracted and stored into the SQLite database.
 
 Author: Claudio Fanconi
 Email: claudio.fanconi@outlook.com
-'''
+"""
 
 from flask import Flask, request, jsonify, render_template
 import json
 import sqlite3
 import hashlib
 
-HOSTNAME = '0.0.0.0'
+HOSTNAME = "0.0.0.0"
 PORT = 5000
-DATABASE = './MyDB.db'
+DATABASE = "./MyDB.db"
 
 # Initialize Flask application
 app = Flask(__name__)
+
 
 def create_connection(db_file):
     """ create a database connection to the SQLite database
@@ -33,18 +34,22 @@ def create_connection(db_file):
         print(e)
     return conn
 
+
 def initialize_db(conn):
     """ Initialize user table
     :param conn: database connection
     """
     with conn:
         cur = conn.cursor()
-        cur.execute('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT,fname TEXT, lname TEXT, email TEXT, pwd TEXT, age INTEGER, city TEXT, country TEXT)')
+        cur.execute(
+            "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT,fname TEXT, lname TEXT, email TEXT, pwd TEXT, age INTEGER, city TEXT, country TEXT)"
+        )
 
     conn.commit()
 
+
 # root
-@app.route('/')
+@app.route("/")
 def index():
     """
     this is a root dir of my server
@@ -52,78 +57,89 @@ def index():
     """
     return "hello there %s" % request.remote_addr
 
-@app.route('/new_user', methods=['POST', 'GET'])
+
+@app.route("/new_user", methods=["POST", "GET"])
 def new_user():
     """
     Adds new user to DB
     :return: json
     """
-    msg = {"status":"UNKNOWN"}
-    if request.method == 'POST':
+    msg = {"status": "UNKNOWN"}
+    if request.method == "POST":
         received = request.get_json()
         try:
-            fname = received['fname']
-            lname = received['lname']
-            email = received['email']
-            pwd = received['pwd']
-            age = received['age']
-            city = received['city']
-            country = received['country']
+            fname = received["fname"]
+            lname = received["lname"]
+            email = received["email"]
+            pwd = received["pwd"]
+            age = received["age"]
+            city = received["city"]
+            country = received["country"]
 
             conn = create_connection(DATABASE)
             with conn:
                 cur = conn.cursor()
-                cur.execute('SELECT * FROM users WHERE (fname=? AND lname=? AND email=?)', (fname, lname, email))
+                cur.execute(
+                    "SELECT * FROM users WHERE (fname=? AND lname=? AND email=?)",
+                    (fname, lname, email),
+                )
                 entry = cur.fetchone()
-                
+
                 if entry is None:
-                    cur.execute("INSERT INTO users (fname,lname,email,pwd,age,city,country) VALUES (?,?,?,?,?,?,?)",(fname,lname,email,pwd,age,city,country))
-                    msg = {"status":"OK"}
+                    cur.execute(
+                        "INSERT INTO users (fname,lname,email,pwd,age,city,country) VALUES (?,?,?,?,?,?,?)",
+                        (fname, lname, email, pwd, age, city, country),
+                    )
+                    msg = {"status": "OK"}
                 else:
-                    msg = {"status":"ALREADY EXISTS"}
+                    msg = {"status": "ALREADY EXISTS"}
             conn.commit()
 
         except:
             conn.rollback()
-            msg = {"status":"ERROR"}
-      
+            msg = {"status": "ERROR"}
+
         finally:
             return json.dumps(msg)
             conn.close()
 
-@app.route('/login', methods=['POST', 'GET'])
+
+@app.route("/login", methods=["POST", "GET"])
 def login():
     """
     Verifies Login
     :return: json
     """
-    msg = {"status":"UNKNOWN"}
-    if request.method == 'POST':
+    msg = {"status": "UNKNOWN"}
+    if request.method == "POST":
         received = request.get_json()
         try:
-            email = received['email']
-            pwd = received['pwd']
+            email = received["email"]
+            pwd = received["pwd"]
             conn = create_connection(DATABASE)
             with conn:
                 cur = conn.cursor()
-                cur.execute('SELECT * FROM users WHERE (email=? AND pwd=?)', (email, pwd))
+                cur.execute(
+                    "SELECT * FROM users WHERE (email=? AND pwd=?)", (email, pwd)
+                )
                 entry = cur.fetchone()
-                
+
                 if entry is None:
-                    msg = {"status":"NOT CORRECT"}
+                    msg = {"status": "NOT CORRECT"}
                 else:
-                    msg = {"status":"OK"}
+                    msg = {"status": "OK"}
             conn.commit()
 
         except:
             conn.rollback()
-            msg = {"status":"ERROR"}
-      
+            msg = {"status": "ERROR"}
+
         finally:
             return json.dumps(msg)
             conn.close()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     conn = create_connection(DATABASE)
     initialize_db(conn)
     conn.close()
