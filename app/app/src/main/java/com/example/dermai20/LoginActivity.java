@@ -92,15 +92,17 @@ public class LoginActivity extends AppCompatActivity {
         // Execute POST request
         String response_code = HttpConnector.post(BACKEND_URL, json.toString());
 
+
         new android.os.Handler().postDelayed(
                 () -> {
                     if(response_code.equals(getResources().getString(R.string.successfull_code))){
                         onLoginSuccess();
+                        progressDialog.dismiss();
                     } else {
                         onLoginFailed();
+                        progressDialog.dismiss();
                     }
-                    progressDialog.dismiss();
-                }, 3000);
+                }, 2000);
     }
 
     /**
@@ -114,9 +116,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
+                onLoginSuccess();
                 this.finish();
             }
         }
@@ -134,10 +134,11 @@ public class LoginActivity extends AppCompatActivity {
      * Action upon successful login, go to UserActivity
      */
     public void onLoginSuccess() {
+        Toast.makeText(getBaseContext(), R.string.login_successfull, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getApplicationContext(), UserActivity.class);
+        startActivity(intent);
         _loginButton.setEnabled(true);
-        Intent myIntent = new Intent(getBaseContext(), UserActivity.class);
-        startActivity(myIntent);
-        finish();
+        //finish();
     }
 
     /**
