@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
      *
      * @param savedInstanceState
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Process successfull login.
+     * Process successful login.
      *
      * @param requestCode
      * @param resultCode
