@@ -1,4 +1,4 @@
-'''
+"""
 Backend script to give predictions with Deep Learning Model.
 
 Workflow: Picture is taken and resized on Android App, and then send via HTTP to Flask backend.
@@ -6,7 +6,7 @@ The information is then extracted and fed through the neural network.
 
 Author: Claudio Fanconi
 Email: claudio.fanconi@outlook.com
-'''
+"""
 from flask import Flask, request, jsonify
 import base64
 import tensorflow as tf
@@ -18,27 +18,27 @@ import numpy as np
 app = Flask(__name__)
 
 # Broadcast
-HOSTNAME = '0.0.0.0'
+HOSTNAME = "0.0.0.0"
 # HTTP Port
 PORT = 5001
 
 THRESHOLD = 0.04
 
 # Prefilter autoencoder model
-json_file = open('./autoencoder/autoencoder.json', 'r')
+json_file = open("./autoencoder/autoencoder.json", "r")
 loaded_model_json = json_file.read()
 json_file.close()
 autoencoder = tf.keras.models.model_from_json(loaded_model_json)
-autoencoder.load_weights('./autoencoder/autoencoder.h5')
+autoencoder.load_weights("./autoencoder/autoencoder.h5")
 autoencoder.summary()
 print("Loaded autoencoder from disk")
 
 # EfficientNet Skin Cancer Model
-json_file = open('./classifier/efficientnetb0.json', 'r')
+json_file = open("./classifier/efficientnetb0.json", "r")
 loaded_model_json = json_file.read()
 json_file.close()
 model = tf.keras.models.model_from_json(loaded_model_json)
-model.load_weights('./classifier/efficientnetb0.h5')
+model.load_weights("./classifier/efficientnetb0.h5")
 model.summary()
 print("Loaded Classifier from Disk")
 
@@ -53,7 +53,7 @@ def index():
 
 
 # GET
-@app.route('/users/<user>')
+@app.route("/users/<user>")
 def hello_user(user):
     """
     this serves as a demo purpose
@@ -64,7 +64,7 @@ def hello_user(user):
 
 
 # POST
-@app.route('/api/mole_prediction', methods=['POST'])
+@app.route("/api/mole_prediction", methods=["POST"])
 def get_mole_prediction():
     """
     predicts mole picture, wether it is bengign or malignant
@@ -72,46 +72,46 @@ def get_mole_prediction():
     """
     json = request.get_json()
 
-    chat_id = str(json['chat_id'])
-    encoded_image = json['encoded_image']
+    chat_id = str(json["chat_id"])
+    encoded_image = json["encoded_image"]
     img = base64.b64decode(encoded_image)
     img = Image.open(BytesIO(img)).convert("RGB")
-    img.save('./'+chat_id+'.png')
+    img.save("./" + chat_id + ".png")
 
     # resize image
-    img = img.resize((224, 224)) 
+    img = img.resize((224, 224))
     img = np.array(img)
-    img1 = img / 255.
-    img = np.reshape(img, (1,224,224,3))
-    img1 =np.reshape(img1, (1,224,224,3))
+    img1 = img / 255.0
+    img = np.reshape(img, (1, 224, 224, 3))
+    img1 = np.reshape(img1, (1, 224, 224, 3))
 
     decoded_img = autoencoder.predict(img1)
-    mse = np.mean((img1 - decoded_img)**2)
+    mse = np.mean((img1 - decoded_img) ** 2)
     print(mse)
-    if mse> THRESHOLD:
-        prediction = 'outlier'
+    if mse > THRESHOLD:
+        prediction = "outlier"
         probability = 0
 
-    else: 
-        y_proba = model.predict(img) 
-        y_pred = np.argmax(y_proba, axis= 1)
+    else:
+        y_proba = model.predict(img)
+        y_pred = np.argmax(y_proba, axis=1)
         print(y_proba, y_pred[0])
 
-        probability = y_proba[0][y_pred[0]]*100
-        prediction = 'benign' 
+        probability = y_proba[0][y_pred[0]] * 100
+        prediction = "benign"
         if y_pred == 1:
-            prediction = 'malignant'
+            prediction = "malignant"
 
         # prepare data to be sent back
     data = {
-            'chat_id': chat_id,
-            'prediction': prediction,
-            'probability': str(probability)
-        }
-    
-    print(data) 
+        "chat_id": chat_id,
+        "prediction": prediction,
+        "probability": str(probability),
+    }
+
+    print(data)
     return jsonify(data)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(host=HOSTNAME, port=PORT)

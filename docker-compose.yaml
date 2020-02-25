@@ -1,21 +1,21 @@
-version: '3'
+version: "3"
 services:
     db:
         build: ./database
         stdin_open: true
         tty: true
         ports:
-        - 5000:5000
+            - 5000:5000
         volumes:
-        - ./database:/code
+            - ./database:/code
         environment:
             FLASK_ENV: development
     ml:
         build: ./ml_service
         ports:
-        - 5001:5001
+            - 5001:5001
         volumes:
-        - ./ml_service:/code
+            - ./ml_service:/code
         environment:
             FLASK_ENV: development
             FLASK_DEBUG: 0
