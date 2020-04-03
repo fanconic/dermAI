@@ -47,7 +47,13 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         BACKEND_URL = getResources().getString(R.string.db_app) + getResources().getString(R.string.db_login);
-        _loginButton.setOnClickListener(v -> login());
+        _loginButton.setOnClickListener(v -> {
+            try {
+                login();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
 
         _signupLink.setOnClickListener(v -> {
             // Start the Sign up activity
@@ -61,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
      * Furthermore, processes the response of the server.
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void login() {
+    public void login() throws JSONException {
         Log.d(TAG, getResources().getString(R.string.login));
 
         if (!validate()) {
@@ -90,12 +96,20 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Execute POST request
-        String response_code = HttpConnector.post(BACKEND_URL, json.toString());
+        JSONObject response_json = HttpConnector.post(BACKEND_URL, json.toString());
+        String response_code = response_json.get("status").toString();
 
         new android.os.Handler().postDelayed(
                 () -> {
-                    if(response_code.equals(getResources().getString(R.string.successfull_code))){
-                        onLoginSuccess();
+                    // If response if OK
+                    if (response_code.equals(getResources().getString(R.string.successfull_code))) {
+                        String fname = null;
+                        try {
+                            fname = response_json.get("fname").toString();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        onLoginSuccess(fname);
                         progressDialog.dismiss();
                     } else {
                         onLoginFailed();
@@ -115,7 +129,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-                onLoginSuccess();
+                String fname = data.getStringExtra("fname");
+                onLoginSuccess(fname);
                 this.finish();
             }
         }
@@ -131,12 +146,15 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Action upon successful login, go to UserActivity
+     *
+     * @param fname : first name of user for greeting.
      */
-    public void onLoginSuccess() {
+    public void onLoginSuccess(String fname) {
         Toast.makeText(getBaseContext(), R.string.login_successfull, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(), UserActivity.class);
+        intent.putExtra("fname", fname);
         startActivity(intent);
-        finish();
+        this.finish();
     }
 
     /**

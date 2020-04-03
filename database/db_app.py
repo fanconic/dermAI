@@ -127,7 +127,8 @@ def login():
                 if entry is None:
                     msg = {"status": "NOT CORRECT"}
                 else:
-                    msg = {"status": "OK"}
+                    fname = entry[1]
+                    msg = {"status": "OK", "fname" : fname}
             conn.commit()
 
         except:
