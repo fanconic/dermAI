@@ -1,6 +1,7 @@
 # Database
 database/MyDB.db
 database/__pycache__
+MyDB.db-journal
 
 # Pycache
 database/__pycache__

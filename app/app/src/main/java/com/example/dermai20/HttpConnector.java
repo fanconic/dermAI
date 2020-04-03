@@ -25,15 +25,6 @@ public class HttpConnector extends AppCompatActivity {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     /**
-     *
-     *
-     * @param url
-     * @param json_string
-     * @throws IOException
-     * @return code
-     */
-
-    /**
      *  Performs a HTML POST request to the backend.
      *
      * @param url: backend URL

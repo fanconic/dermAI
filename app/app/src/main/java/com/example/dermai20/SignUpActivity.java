@@ -21,6 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.dermai20.HttpConnector.*;
 import static com.example.dermai20.R.style.ThemeOverlay_AppCompat_Dark;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -110,29 +111,41 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         // Execute POST request
-        HttpConnector.post(BACKEND_URL, json.toString());
+        String response_code = post(BACKEND_URL, json.toString());
 
         new android.os.Handler().postDelayed(
                 () -> {
-                    // On complete call either onSignupSuccess or onSignupFailed
-                    // depending on success
-                    onSignupSuccess();
-                    // onSignupFailed();
-                    progressDialog.dismiss();
-                }, 3000);
+                    if(response_code.equals(getResources().getString(R.string.successfull_code))){
+                        onSignupSuccess();
+                        progressDialog.dismiss();
+                    } else if(response_code.equals(getString(R.string.already_exists_code))) {
+                        onAlreadyExists();
+                        progressDialog.dismiss();
+                    } else {
+                        onSignupFailed();
+                        progressDialog.dismiss();
+                    }
+                }, 2000);
     }
 
     /**
-     * Action upon successfull signup.
+     * Action upon successful sign up.
      */
     public void onSignupSuccess() {
-        _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
         finish();
     }
 
     /**
-     * Action upon failed signup.
+     * Action upon successful sign up.
+     */
+    public void onAlreadyExists() {
+        Toast.makeText(getBaseContext(), R.string.account_exists_msg, Toast.LENGTH_LONG).show();
+        _signupButton.setEnabled(true);
+    }
+
+    /**
+     * Action upon failed sign up.
      */
     public void onSignupFailed() {
         Toast.makeText(getBaseContext(), getResources().getString(R.string.login_failed), Toast.LENGTH_LONG).show();

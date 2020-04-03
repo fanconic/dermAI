@@ -92,7 +92,6 @@ public class LoginActivity extends AppCompatActivity {
         // Execute POST request
         String response_code = HttpConnector.post(BACKEND_URL, json.toString());
 
-
         new android.os.Handler().postDelayed(
                 () -> {
                     if(response_code.equals(getResources().getString(R.string.successfull_code))){
@@ -137,8 +136,7 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getBaseContext(), R.string.login_successfull, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(), UserActivity.class);
         startActivity(intent);
-        _loginButton.setEnabled(true);
-        //finish();
+        finish();
     }
 
     /**
