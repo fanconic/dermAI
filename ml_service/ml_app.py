@@ -64,7 +64,7 @@ def hello_user(user):
 
 
 # POST
-@app.route("/api/mole_prediction", methods=["POST"])
+@app.route("/predict", methods=["POST"])
 def get_mole_prediction():
     """
     predicts mole picture, wether it is bengign or malignant
@@ -104,12 +104,12 @@ def get_mole_prediction():
 
         # prepare data to be sent back
     data = {
+        "status" : "OK",
         "chat_id": chat_id,
         "prediction": prediction,
         "probability": str(probability),
     }
-
-    print(data)
+    
     return jsonify(data)
 
 

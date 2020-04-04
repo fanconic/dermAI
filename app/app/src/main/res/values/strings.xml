@@ -21,4 +21,5 @@
     <string name="login_successfull">Login successful</string>
     <string name="account_exists_msg">Account already exists...</string>
     <string name="already_exists_code">ALREADY EXISTS</string>
+    <string name="predict">predict</string>
 </resources>
