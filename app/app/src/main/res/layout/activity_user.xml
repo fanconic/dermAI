@@ -14,8 +14,9 @@
         android:paddingRight="24dp">
 
         <ImageView
+            android:id="@+id/logo_picture"
             android:layout_width="wrap_content"
-            android:layout_height="300dp"
+            android:layout_height="200dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="24dp"
             android:src="@drawable/dermai_horizontal" />
@@ -24,10 +25,43 @@
             android:id="@+id/welcome_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="36dp"
             android:gravity="center"
             android:textColor="#640202"
             android:textSize="30dip" />
+
+        <TextView
+            android:id="@+id/lets_get_started"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:text="Let's get started"
+            android:textColor="#640202"
+            android:textSize="16dip" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/camera"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="#8D8D8D"
+            android:padding="12dp"
+            android:text="Camera"
+            android:textColor="#640202" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/gallery"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp"
+            android:background="#8D8D8D"
+            android:padding="12dp"
+            android:text="Gallery"
+            android:textColor="#640202" />
 
     </LinearLayout>
 </ScrollView>

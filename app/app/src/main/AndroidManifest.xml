@@ -25,6 +25,7 @@
         <activity android:name=".LoginActivity" android:theme="@style/AppTheme" />
         <activity android:name=".SignUpActivity" android:theme="@style/AppTheme" />
         <activity android:name=".UserActivity" android:theme="@style/AppTheme" />
+        <activity android:name=".PictureActivity" android:theme="@style/AppTheme" />
    </application>
 
 </manifest>

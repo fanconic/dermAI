@@ -129,8 +129,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-                String fname = data.getStringExtra("fname");
-                onLoginSuccess(fname);
+                onLoginSuccess(data.getStringExtra("fname"));
                 this.finish();
             }
         }
