@@ -1,11 +1,17 @@
 package com.example.dermai20;
 
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,8 +46,22 @@ public class PictureActivity extends AppCompatActivity {
         switch (requestCode) {
             case TAKE_IMAGE:
                 if (resultCode == RESULT_OK) {
-                    Bitmap selectedImage = (Bitmap) getIntent().getExtras().get("data");
-                    _inspectedPicture.setImageBitmap(selectedImage);
+                    Bitmap bitmap = (Bitmap) getIntent().getExtras().get("bitMapImage");
+                    _inspectedPicture.setImageBitmap(bitmap);
+                }
+                break;
+            case PICK_IMAGE:
+                if (resultCode == RESULT_OK) {
+                    String image_path = getIntent().getStringExtra("imagePath");
+                    Uri imagePath = Uri.parse(image_path);
+
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imagePath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    _inspectedPicture.setImageBitmap(bitmap);
                 }
                 break;
         }
@@ -55,6 +75,7 @@ public class PictureActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * Picture is approved
      */
@@ -66,7 +87,7 @@ public class PictureActivity extends AppCompatActivity {
      * Picture is Declined
      */
     private void declinePicture() {
-
+        this.finish();
     }
 }
 

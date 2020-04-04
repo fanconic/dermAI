@@ -74,11 +74,15 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Intent intent = new Intent(getApplicationContext(), PictureActivity.class);
-        intent.putExtra("data", (Bitmap) data.getExtras().get("data"));
+        if(requestCode == TAKE_IMAGE){
+            intent.putExtra("bitMapImage", (Bitmap) data.getExtras().get("data"));
+        }
+
+        if(requestCode == PICK_IMAGE){
+            intent.putExtra("imagePath", data.getData().toString());
+        }
         intent.putExtra("requestCode", requestCode);
         intent.putExtra("resultCode", resultCode);
         startActivity(intent);
-        this.finish();
     }
-
 }
