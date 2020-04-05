@@ -86,6 +86,7 @@ def get_mole_prediction():
 
     decoded_img = autoencoder.predict(img)
     mse = np.mean((img - decoded_img) ** 2)
+   
     print(mse)
     if mse > THRESHOLD:
         prediction = "outlier"
@@ -108,7 +109,6 @@ def get_mole_prediction():
         "prediction": prediction,
         "probability": str(probability),
     }
-    
     return jsonify(data)
 
 
