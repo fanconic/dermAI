@@ -3,6 +3,9 @@ database/MyDB.db
 database/__pycache__
 MyDB.db-journal
 
+# Machine Learning
+ml_service/*.png
+
 # Pycache
 database/__pycache__
 ml_service/__pycache__
