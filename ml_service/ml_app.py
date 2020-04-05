@@ -81,12 +81,11 @@ def get_mole_prediction():
     # resize image
     img = img.resize((224, 224))
     img = np.array(img)
-    img1 = img / 255.0
+    img = img / 255.0
     img = np.reshape(img, (1, 224, 224, 3))
-    img1 = np.reshape(img1, (1, 224, 224, 3))
 
-    decoded_img = autoencoder.predict(img1)
-    mse = np.mean((img1 - decoded_img) ** 2)
+    decoded_img = autoencoder.predict(img)
+    mse = np.mean((img - decoded_img) ** 2)
     print(mse)
     if mse > THRESHOLD:
         prediction = "outlier"

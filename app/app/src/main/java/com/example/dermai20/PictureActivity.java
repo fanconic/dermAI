@@ -1,11 +1,13 @@
 package com.example.dermai20;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Base64;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -99,13 +101,14 @@ public class PictureActivity extends AppCompatActivity {
         // Base64 encode image
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream .toByteArray();
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
         String encoded_image = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
         // Create JSON Object
         JSONObject json = new JSONObject();
+        String device_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         try {
-            json.put("chat_id", 120);
+            json.put("chat_id", device_id);
             json.put("encoded_image", encoded_image);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -113,9 +116,17 @@ public class PictureActivity extends AppCompatActivity {
 
         // Execute POST request
         JSONObject response_json = HttpConnector.post(BACKEND_URL, json.toString());
-        String prediction = response_json.get("prediction").toString();
-        float probability = Float.parseFloat(response_json.get("probability").toString());
-        String response_code = response_json.get("status").toString();
+        if (device_id.equals(response_json.get("chat_id").toString()) && response_json.get("status").toString().equals("OK")) {
+            String prediction = response_json.get("prediction").toString();
+            float probability = Float.parseFloat(response_json.get("probability").toString());
+
+            // Pass to next activity:
+            Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
+            intent.putExtra("prediction", prediction);
+            intent.putExtra("probability", probability);
+            startActivity(intent);
+            this.finish();
+        }
     }
 
     /**
