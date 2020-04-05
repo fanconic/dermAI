@@ -22,46 +22,56 @@
             android:src="@drawable/dermai_horizontal" />
 
         <TextView
-            android:id="@+id/welcome_text"
+            android:id="@+id/your_results"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="36dp"
+            android:layout_marginBottom="24dp"
             android:gravity="center"
+            android:text="Your Results"
             android:textColor="#640202"
             android:textSize="30dip" />
 
         <TextView
-            android:id="@+id/lets_get_started"
+            android:id="@+id/prediction_results"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="6dp"
             android:gravity="center"
-            android:text="Let's get started"
-            android:textColor="#640202"
+            android:text="Mole Prediction:"
+            android:textColor="#8D8D8D"
             android:textSize="16dip" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/camera"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:background="#8D8D8D"
-            android:padding="12dp"
-            android:text="Camera"
-            android:textColor="#640202" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/gallery"
+        <TextView
+            android:id="@+id/prediction_results_nr"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="24dp"
-            android:background="#8D8D8D"
-            android:padding="12dp"
-            android:text="Gallery"
-            android:textColor="#640202" />
+            android:gravity="center"
+            android:textColor="#640202"
+            android:textSize="16dip" />
+
+        <TextView
+            android:id="@+id/probability_results"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="6dp"
+            android:gravity="center"
+            android:text="Probability:"
+            android:textColor="#8D8D8D"
+            android:textSize="16dip" />
+
+        <TextView
+            android:id="@+id/probability_results_nr"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:textColor="#640202"
+            android:textSize="16dip" />
 
     </LinearLayout>
 </ScrollView>

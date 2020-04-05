@@ -1,6 +1,7 @@
 package com.example.dermai20;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,7 +59,13 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
         BACKEND_URL = getResources().getString(R.string.db_app) + getResources().getString(R.string.db_new_user);
-        _signupButton.setOnClickListener(v -> signup());
+        _signupButton.setOnClickListener(v -> {
+            try {
+                signup();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
 
         _loginLink.setOnClickListener(v -> {
             // Finish the registration screen and return to the Login activity
@@ -72,7 +79,7 @@ public class SignUpActivity extends AppCompatActivity {
      * Furthermore, process the response.
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void signup() {
+    public void signup() throws JSONException {
         Log.d(TAG, getResources().getString(R.string.sign_up));
 
         if (!validate()) {
@@ -102,7 +109,7 @@ public class SignUpActivity extends AppCompatActivity {
             json.put("lname", lname);
             json.put("email", email);
             json.put("pwd", password);
-            json.put("age",age);
+            json.put("age", age);
             json.put("country", country);
             json.put("city", city);
         } catch (JSONException e) {
@@ -110,29 +117,46 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         // Execute POST request
-        HttpConnector.post(BACKEND_URL, json.toString());
+        JSONObject response_json = HttpConnector.post(BACKEND_URL, json.toString());
+        String response_code = response_json.get("status").toString();
 
         new android.os.Handler().postDelayed(
                 () -> {
-                    // On complete call either onSignupSuccess or onSignupFailed
-                    // depending on success
-                    onSignupSuccess();
-                    // onSignupFailed();
-                    progressDialog.dismiss();
-                }, 3000);
+                    if (response_code.equals(getResources().getString(R.string.successfull_code))) {
+                        onSignupSuccess(fname);
+                        progressDialog.dismiss();
+                    } else if (response_code.equals(getString(R.string.already_exists_code))) {
+                        onAlreadyExists();
+                        progressDialog.dismiss();
+                    } else {
+                        onSignupFailed();
+                        progressDialog.dismiss();
+                    }
+                }, 2000);
     }
 
     /**
-     * Action upon successfull signup.
+     * Action upon successful sign up.
+     *
+     * @param fname : First name of the user for greeting.
      */
-    public void onSignupSuccess() {
-        _signupButton.setEnabled(true);
-        setResult(RESULT_OK, null);
+    public void onSignupSuccess(String fname) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("fname", fname);
+        setResult(RESULT_OK, returnIntent);
         finish();
     }
 
     /**
-     * Action upon failed signup.
+     * Action upon successful sign up.
+     */
+    public void onAlreadyExists() {
+        Toast.makeText(getBaseContext(), R.string.account_exists_msg, Toast.LENGTH_LONG).show();
+        _signupButton.setEnabled(true);
+    }
+
+    /**
+     * Action upon failed sign up.
      */
     public void onSignupFailed() {
         Toast.makeText(getBaseContext(), getResources().getString(R.string.login_failed), Toast.LENGTH_LONG).show();
