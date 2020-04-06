@@ -25,5 +25,5 @@ $ sudo docker-compose up
 ```
 
 ## Demo GIF of DermAI 2.0 
-Currently working at version 2.0\
+Currently working on version 2.0\
 ![DermAI Demo](dermai_gif.gif)
