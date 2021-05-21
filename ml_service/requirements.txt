@@ -1,5 +1,5 @@
 Flask==1.0.2
-tensorflow==2.4.0
+tensorflow==2.5.0
 efficientnet==1.0.0
 numpy==1.16.2
 Pillow>=6.2.2
