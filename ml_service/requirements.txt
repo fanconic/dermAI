@@ -1,4 +1,4 @@
-Flask==1.0.2
+Flask==2.3.2
 tensorflow==2.5.3
 efficientnet==1.0.0
 numpy==1.21.0
